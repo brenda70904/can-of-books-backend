@@ -7,7 +7,7 @@ const app = express();
 app.use(cors());
 
 const mongoose = require('mongoose');
-const Book =require('./models/Books');
+const bookModel =require('./models/Books');
 
 const PORT = process.env.PORT || 3001;
 
@@ -27,7 +27,7 @@ app.get('/books',getBooks);
 
 async function getBooks(req, res, next) {
   try {
-    let result = await Book.find();
+    let result = await bookModel.find();
     res.send(result);
   } catch (error) {
   next(error); 
