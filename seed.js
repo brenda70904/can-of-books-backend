@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 mongoose.connect(process.env.DB_URL);
 
-const {bookModel} = require('./models/Books.js');
+const bookModel = require('./models/Books.js');
 
 const seed = async function () {
   console.log(bookModel);
