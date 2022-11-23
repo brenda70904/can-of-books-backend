@@ -6,7 +6,7 @@ const bookSchema = new Schema({
   img_url:{type:String, required:false},
   description:{type:String, required:true},
   author:{type:String, required:true},
-  status:{type:Boolean, required:true}
+  status:{type:Boolean, required:false}
 });
 
 
