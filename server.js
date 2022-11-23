@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const Books =require('./models/Books');
+const Books = require('./models/Books');
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -35,7 +35,7 @@ async function getBooks(req, res, next) {
     let result = await Books.find();
     res.status(200).send(result);
   } catch (error) {
-  next(error); 
+    next(error);
   }
 }
 
@@ -51,7 +51,7 @@ async function postBooks(req, res, next) {
 async function deleteBooks(req, res, next) {
   try {
     await Books.findByIdAndDelete(req.params.id);
-    res.send('book deleted')
+    res.send('book deleted');
   } catch (error) {
     next(error);
   }
@@ -61,7 +61,7 @@ app.get('*', (request, response) => {
   response.status(404).send('Not availabe');
 });
 
-app.use((error, request, response, next) => {
+app.use((error, request, res) => {
   res.status(500).send(error.message);
 });
 
