@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const Books = require('./models/Books');
+const verifyUser = require('./auth');
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -32,13 +33,31 @@ app.post('/books', postBooks);
 app.delete('/books/:id', deleteBooks);
 app.put('/books/:id', putBooks);
 
+// verifyUser(request, async (err, user) => {
+//   if (err) {
+//     //console.log(err);
+//     res.send('invalid token');
+//   } else {
+//     // insert try catch logic here, check syntax immediately
+//   }
+// });
+
 async function getBooks(req, res, next) {
-  try {
-    let result = await Books.find();
-    res.status(200).send(result);
-  } catch (error) {
-    next(error);
-  }
+
+  verifyUser(req, async (err, user) => {
+    if (err) {
+      //console.log(err);
+      res.send('invalid token');
+    } else {
+
+      try {
+        let result = await Books.find();
+        res.status(200).send(result);
+      } catch (error) {
+        next(error);
+      }
+    }
+  });
 }
 
 async function postBooks(req, res, next) {
@@ -63,18 +82,18 @@ async function putBooks(req, res, next) {
   try {
     let id = req.params.id;
     let updatedBook = req.body;
-    let newBook = await Books.findByIdAndUpdate(id, updatedBook, {new: true, overwrites: true});
+    let newBook = await Books.findByIdAndUpdate(id, updatedBook, { new: true, overwrites: true });
     res.status(200).send(newBook);
   } catch (error) {
     next(error);
   }
 }
 
-app.get('*', (request, response) => {
+app.get('*', (req, response) => {
   response.status(404).send('Not availabe');
 });
 
-app.use((error, request, res) => {
+app.use((error, req, res) => {
   res.status(500).send(error.message);
 });
 
