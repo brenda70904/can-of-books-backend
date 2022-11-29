@@ -45,6 +45,7 @@ app.put('/books/:id', putBooks);
 async function getBooks(req, res, next) {
 
   verifyUser(req, async (err, user) => {
+    console.log(user);
     if (err) {
       //console.log(err);
       res.send('invalid token');
